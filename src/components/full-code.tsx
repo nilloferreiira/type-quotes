@@ -63,7 +63,7 @@ export default function FullCode() {
     setStarted(!started);
   }
 
-  function handleType(event: ChangeEvent<HTMLInputElement>) {
+  function handleType(event: ChangeEvent<HTMLTextAreaElement>) {
     setTypedText(event.target.value);
   }
 
@@ -80,35 +80,47 @@ export default function FullCode() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-3/5 mx-auto">
-      <div>
-        <div className="mb-4">
-          <h1>Teste de Digitação com Citações</h1>
-          <h2></h2>
+    <div className="flex flex-col items-center justify-center h-screen w-3/5 gap-10 mx-auto">
+        <div className="mb-4 text-left w-full">
+          <h1 className="text-gray-200 font-bold text-3xl">Teste de Digitação com Citações</h1>
         </div>
-        <blockquote className="mb-4">
+        <div className="w-full flex flex-col gap-4 space-y-5">
+        <blockquote className="text-gray-400 text-xl italic">
           {quote} - <strong>{author}</strong>
         </blockquote>
-        <input
-          type="text"
+        <textarea
           value={typedText}
           onChange={handleType}
-          className="p-4 border-2 border-gray-300 rounded-md focus:outline-none focus:border-blue-500"
+          className={`
+                    p-4 border-2
+                    w-full
+                    h-20 
+                    text-gray-100
+                    border-sky-950
+                    rounded-md
+                    resize-none 
+                    focus:outline-none -sky-950 
+                    focus:border-gray-300/80 
+                    bg-gray-900
+                    `}
         />
 
-        <div className="mt-4 flex justify-between">
+        </div>
+
+        <div className="mt-4 flex justify-center gap-10 w-full">
           {/* trocar para "ask for new quote" */}
           <button
             onClick={handleStart}
-            className={`text-lg  ${
-              started ? "text-red-500" : "text-green-500"
-            }`}
+            className={`text-lg  
+                        ${started ? "text-red-500" : "text-gray-100"}
+                        bg-sky-700 rounded-xl px-4 focus-visible:ring-2 focus-visible:ring-sky-400 focus:outline-none hover:bg-opacity-75 transition-all
+            `}
           >
             {started ? <span>Reiniciar</span> : <span>Começar</span>}
           </button>
           {/* trocar para "ask for new quote" */}
 
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-start justify-center text-gray-200">
             <p className="">
               {"WPM: "}
               {stats.wpm}
@@ -126,7 +138,6 @@ export default function FullCode() {
             </p>
           </div>
         </div>
-      </div>
     </div>
   );
 }
