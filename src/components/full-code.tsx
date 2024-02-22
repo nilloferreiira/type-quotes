@@ -11,7 +11,7 @@ export default function FullCode() {
   const [quote, setQuote] = useState<string>("");
   const [author, setAuthor] = useState<string>("");
   const [typedText, setTypedText] = useState<string>("");
-  const [started, setStarted] = useState<boolean>(true)
+  const [started, setStarted] = useState<boolean>(false);
   const [stats, setStats] = useState<Stats>({
     wpm: 0,
     cpm: 0,
@@ -36,17 +36,23 @@ export default function FullCode() {
       const time = (Date.now() - startTimeRef.current!) / 1000;
       const wpm = Math.floor((words.length / time) * 60);
       const cpm = Math.floor((typedText.length / time) * 60);
-      const accuracy = Math.floor(
-        ((typedText.length - countErrors(typedText, quote)) /
-          typedText.length) *
-          100
-      );
+      const accuracy =
+        typedText.length === 0
+          ? 0
+          : Math.floor(
+              ((typedText.length - countErrors(typedText, quote)) /
+                typedText.length) *
+                100
+            );
+
       setStats({
         wpm,
         cpm,
         accuracy,
         time,
       });
+
+      console.log(accuracy);
     }
     calculateStats();
   }, [typedText, quote]);
@@ -54,23 +60,24 @@ export default function FullCode() {
   function handleStart() {
     startTimeRef.current = Date.now();
     setTypedText("");
-    setStarted(!started)
+    setStarted(!started);
   }
 
   function handleType(event: ChangeEvent<HTMLInputElement>) {
     setTypedText(event.target.value);
   }
 
-    function countErrors(typed: string, original: string) {
-      let errors = 0;
-      for (let i = 0; i < typed.length; i++) {
-        if (typed[i] !== original[i]) {
-          errors++;
-        }
+  function countErrors(typed: string, original: string) {
+    let errors = 0;
+    for (let i = 0; i < typed.length; i++) {
+      if (typed[i] !== original[i]) {
+        errors++;
       }
-
-      return errors;
     }
+
+    return errors;
+  }
+
 
   return (
     <div className="flex flex-col items-center justify-center h-screen w-3/5 mx-auto">
@@ -90,9 +97,17 @@ export default function FullCode() {
         />
 
         <div className="mt-4 flex justify-between">
-          <button onClick={handleStart} className={`text-lg  ${started ? 'text-green-500' : 'text-red-500'}`}>
-            {started ? <span>Começar</span> : <span>Reiniciar</span> }
+          {/* trocar para "ask for new quote" */}
+          <button
+            onClick={handleStart}
+            className={`text-lg  ${
+              started ? "text-red-500" : "text-green-500"
+            }`}
+          >
+            {started ? <span>Reiniciar</span> : <span>Começar</span>}
           </button>
+          {/* trocar para "ask for new quote" */}
+
           <div className="flex flex-col items-center">
             <p className="">
               {"WPM: "}
@@ -104,7 +119,10 @@ export default function FullCode() {
             </p>
             <p className="">
               {"Precisão: "}
-              {Number.isNaN(stats.accuracy) ? 0 : stats.accuracy}%
+              {Number.isNaN(stats.accuracy || stats.accuracy == -Infinity)
+                ? 0
+                : stats.accuracy}
+              %
             </p>
           </div>
         </div>
