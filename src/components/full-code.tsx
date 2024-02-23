@@ -21,13 +21,13 @@ export default function FullCode() {
   const startTimeRef = useRef<number | null>(null);
 
   useEffect(() => {
-    const getQuote = async () => {
-      const response = await fetch("https://api.quotable.io/random");
+    async function getQuotes() {
+    const response = await fetch("https://api.quotable.io/random");
       const data = await response.json();
       setQuote(data.content);
       setAuthor(data.author);
-    };
-    getQuote();
+    }
+    getQuotes()
   }, []);
 
   useEffect(() => {
@@ -80,18 +80,21 @@ export default function FullCode() {
 
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen w-3/5 gap-10 mx-auto">
+    <div className="w-full bg-gray-950">
+      <div className="flex flex-col items-center justify-center h-screen w-3/5 gap-10 mx-auto">
         <div className="mb-4 text-left w-full">
-          <h1 className="text-gray-200 font-bold text-3xl">Teste de Digitação com Citações</h1>
+          <h1 className="text-gray-200 font-bold text-3xl">
+            Teste de Digitação com Citações
+          </h1>
         </div>
         <div className="w-full flex flex-col gap-4 space-y-5">
-        <blockquote className="text-gray-400 text-xl italic">
-          {quote} - <strong>{author}</strong>
-        </blockquote>
-        <textarea
-          value={typedText}
-          onChange={handleType}
-          className={`
+          <blockquote className="text-gray-400 text-xl italic">
+            {quote} - <strong>{author}</strong>
+          </blockquote>
+          <textarea
+            value={typedText}
+            onChange={handleType}
+            className={`
                     p-4 border-2
                     w-full
                     h-20 
@@ -103,8 +106,7 @@ export default function FullCode() {
                     focus:border-gray-300/80 
                     bg-gray-900
                     `}
-        />
-
+          />
         </div>
 
         <div className="mt-4 flex justify-center gap-10 w-full">
@@ -138,6 +140,7 @@ export default function FullCode() {
             </p>
           </div>
         </div>
+      </div>
     </div>
   );
 }
