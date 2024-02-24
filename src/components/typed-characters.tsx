@@ -6,11 +6,10 @@ interface TypedCharactersProps {
     typedText: string,
     quote: string,
     isWrong: boolean
-    // className: string,
 }
 
 export function TypedCharacters({typedText, quote}: TypedCharactersProps) {
-    const TypedCharacters = typedText.split("")
+    const typedCharacters = typedText.split("")
     
     const [isTheWrongChar, setIsTheWrongChar] = useState<boolean[]>(new Array(typedText.length).fill(false))
 
@@ -22,13 +21,6 @@ export function TypedCharacters({typedText, quote}: TypedCharactersProps) {
         quoteChars.forEach((character, index) => {
           const char = typedChars[index];
           isWrongCharsLocal[index] = char !== character;
-        //   if (char !== null) {
-        //     if (char != character) {
-        //       setIsTheWrongChar(false);
-        //     } else {
-        //        setIsTheWrongChar(true);
-        //     }
-        //   }
         });
 
         setIsTheWrongChar(isWrongCharsLocal);
@@ -39,8 +31,7 @@ export function TypedCharacters({typedText, quote}: TypedCharactersProps) {
     },[typedText])
     return (
         <div className="absolute inset-0">
-            {TypedCharacters.map((char: any, index: any) => {
-                
+            {typedCharacters.map((char: any, index: any) => {
                 return (
                     <Character key={`${char}_${index}`} char={char} isWrong={isTheWrongChar[index]} />
                 )
