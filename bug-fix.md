@@ -1,4 +1,4 @@
 ## BUG Fixes
 
- - accurency (se vc apaga ele nao conta como erro)
- - accurency (ta iniciando fazendo uma conta negativa)
+ - arrumar um jeito de passar o isWrong para cada Char rederizado
+ - as contas estao sendo feitas erradas
