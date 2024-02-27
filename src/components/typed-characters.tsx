@@ -60,14 +60,14 @@ export function TypedCharacters({typedText, quote, author, handleNewQuote, reset
   },[typedText])
 
   function reset() {
-    handleNewQuote();
-    // setIsTheWrongChar(new Array(typedText.length).fill(false));
-    setIsTheWrongChar(initialIsTheWrongCharState);
+    setIsTheWrongChar(new Array(typedText.length).fill(undefined));
+    // setIsTheWrongChar(initialIsTheWrongCharState);
     setPrevTypedTextLength(0);
     setMistakes(0);
     setCpm(0);
     setWpm(0);
     resetTypedText()
+    handleNewQuote();
     console.log(isTheWrongChar)
     // Adicione futuros estados para redefinir
   }
