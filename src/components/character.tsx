@@ -4,9 +4,9 @@ interface CharacterProps {
 }
 
 export function Character({ char, isWrong }: CharacterProps) {
-  const defaultColor = "text-zinc-400";
+  const defaultColor = "text-zinc-500";
   const color = isWrong === undefined ? defaultColor : isWrong ? "text-red-500 underline" : "text-zinc-100";
-
+  // missing get active index
   return (
     <span className={color}>{char}</span>
   );
