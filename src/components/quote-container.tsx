@@ -6,22 +6,16 @@ export default function QuoteContainer() {
   const { quote, author, handleNewQuote } = useQuotes();
   const [type, setType] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
-  // const [isTypingStarted, setIsTypingStarted] = useState<boolean>(false);
   
   function handleType(event: ChangeEvent<HTMLTextAreaElement>) {
     const typedText = event.target.value;
    
-    // if (!isTypingStarted) {
-    //   setIsTypingStarted(true);
-    // }
-
     setType(typedText);
     setIsTyping(true)
   }
 
   function resetTypedText() {
     setType("");
-    // setIsTypingStarted(false);
   }
 
   function handleEndTyping() {

@@ -5,6 +5,10 @@ export default {
     "./src/**/*.tsx",
   ],
   theme: {
+    fontFamily: {
+      'inter': ['inter'],
+      'Open-sans': ['Open-sans'],
+    },
     extend: {},
   },
   plugins: [],

@@ -2,6 +2,7 @@ import { useCallback, useEffect, useState } from "react";
 import { Character } from "./character";
 import useTypingTimer from "../hooks/useTypingTimer";
 import { Results, ResultsProps } from "./results";
+import { IterationCw } from "lucide-react";
 
 interface TypedCharactersProps {
   typedText: string;
@@ -47,15 +48,15 @@ export function TypedCharacters({
 
   const { startTimer, elapsedTime, stopTimer } = useTypingTimer();
 
-  const timeInMinutes = (elapsedTime / 1000) / 60
+  const timeInMinutes = elapsedTime / 1000 / 60;
 
   // functions
   const compareTexts = useCallback(
     (typedText: string) => {
       const isWrongCharsLocal = new Array(typedText.length).fill(false);
       let mistakesCount = 0;
-      let cpmCount = Math.floor(typedText.length / timeInMinutes)
-      let wpmCount = Math.floor((typedText.length / 5) / timeInMinutes)
+      let cpmCount = Math.floor(typedText.length / timeInMinutes);
+      let wpmCount = Math.floor(typedText.length / 5 / timeInMinutes);
       let accurencyCount: number;
 
       //loop comparing the typedText to the quote
@@ -78,9 +79,11 @@ export function TypedCharacters({
       setIsTheWrongChar(isWrongCharsLocal);
       setMistakes(mistakesCount);
       setCpm(cpmCount);
-      setWpm(wpmCount)
+      setWpm(wpmCount);
 
-      accurencyCount = Math.floor(((quote.length - allErrors.length) / quote.length) * 100)
+      accurencyCount = Math.floor(
+        ((quote.length - allErrors.length) / quote.length) * 100
+      );
       setAccurency(accurencyCount);
       return isWrongCharsLocal.some((isWrong) => isWrong);
     },
@@ -88,30 +91,33 @@ export function TypedCharacters({
   );
 
   function reset() {
-    stopTimer()
+    stopTimer();
     setIsTheWrongChar(new Array(typedText.length).fill(undefined));
     setPrevTypedTextLength(0);
     setMistakes(0);
+    setAllErrors([]);
     setCpm(0);
     setWpm(0);
     setAccurency(0);
     resetTypedText();
     handleNewQuote();
-    setResults(undefined)
+    handleEndTyping();
+    setResults(undefined);
     // Adicione futuros estados para redefinir
   }
 
   function saveResults() {
     const result: ResultsProps = {
       results: {
-        mistakes, cpm, wpm, accurency
-      }
+        cpm,
+        wpm,
+        accurency,
+      },
     };
-      setResults(result)
+    setResults(result);
   }
 
   const allCorrect = quote && typedText === quote;
-
   // check if isTyping is true and start the timer
   useEffect(() => {
     if (isTyping) {
@@ -130,12 +136,22 @@ export function TypedCharacters({
       saveResults();
       handleEndTyping();
 
-      console.log(results)
+      console.log(results);
     }
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
   return (
     <div className="relative max-w-full mt-3.5 text-3xl leading-relaxed italic">
+      {isTyping && (
+        <p
+          className={`not-italic text-base ${
+            mistakes !== 0 ? "text-red-500" : "text-gray-400"
+          }`}
+        >
+          mistakes: {mistakes}
+        </p>
+      )}
+
       {splitedQuote.map((char, index) => (
         <Character
           key={char.key}
@@ -146,11 +162,16 @@ export function TypedCharacters({
       <p className="text-xl font-bold text-right p-16"> - {author}</p>
       {/* results */}
 
-        {results !== undefined && (
-          <Results results={results?.results} />
-        )}
+      {results !== undefined && <Results results={results?.results} />}
 
-      <button onClick={reset}>reset</button>
+      <div className="flex items-center justify-center ">
+        <button
+          onClick={reset}
+          className="p-4 text-zinc-400 hover:text-zinc-100 outline-none"
+        >
+          <IterationCw />
+        </button>
+      </div>
     </div>
   );
 }
