@@ -1,4 +1,4 @@
-interface resultsProps {
+export interface ResultsProps {
   results: {
     mistakes: number;
     wpm: number;
@@ -9,7 +9,7 @@ interface resultsProps {
 
 export function Results({
   results: { accurency, cpm, mistakes, wpm },
-}: resultsProps) {
+}: ResultsProps) {
   return (
     <div className="w-4/5 flex justify-around text-lg font-normal text-zinc-400 mx-auto mb-10 text-center">
       <div>

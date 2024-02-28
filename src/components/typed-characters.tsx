@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { Character } from "./character";
 import useTypingTimer from "../hooks/useTypingTimer";
-import { Results } from "./results";
+import { Results, ResultsProps } from "./results";
 
 interface TypedCharactersProps {
   typedText: string;
@@ -43,6 +43,7 @@ export function TypedCharacters({
   const [cpm, setCpm] = useState<number>(0);
   const [wpm, setWpm] = useState<number>(0);
   const [accurency, setAccurency] = useState<number>(0);
+  const [results, setResults] = useState<ResultsProps | undefined>();
 
   const { startTimer, elapsedTime, stopTimer } = useTypingTimer();
 
@@ -96,7 +97,17 @@ export function TypedCharacters({
     setAccurency(0);
     resetTypedText();
     handleNewQuote();
+    setResults(undefined)
     // Adicione futuros estados para redefinir
+  }
+
+  function saveResults() {
+    const result: ResultsProps = {
+      results: {
+        mistakes, cpm, wpm, accurency
+      }
+    };
+      setResults(result)
   }
 
   const allCorrect = quote && typedText === quote;
@@ -116,8 +127,10 @@ export function TypedCharacters({
 
     setPrevTypedTextLength(typedText.length);
     if (allCorrect) {
-      reset();
+      saveResults();
       handleEndTyping();
+
+      console.log(results)
     }
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
@@ -133,12 +146,11 @@ export function TypedCharacters({
       <p className="text-xl font-bold text-right p-16"> - {author}</p>
       {/* results */}
 
-     <Results results={{
-        mistakes: mistakes,
-        wpm: wpm,
-        cpm: cpm,
-        accurency: accurency
-      }} />
+        {results !== undefined && (
+          <Results results={results?.results} />
+        )}
+
+      <button onClick={reset}>reset</button>
     </div>
   );
 }
