@@ -68,7 +68,6 @@ export function TypedCharacters({typedText, quote, author, handleNewQuote, reset
     setWpm(0);
     resetTypedText()
     handleNewQuote();
-    console.log(isTheWrongChar)
     // Adicione futuros estados para redefinir
   }
 
@@ -88,7 +87,7 @@ export function TypedCharacters({typedText, quote, author, handleNewQuote, reset
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
   return (
-    <div className="relative max-w-full mt-3.5 text-3xl leading-relaxed break-all italic">
+    <div className="relative max-w-full mt-3.5 text-3xl leading-relaxed italic">
       {splitedQuote.map((char, index) => (
         <Character
           key={char.key}
