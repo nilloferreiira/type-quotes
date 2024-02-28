@@ -1,10 +1,14 @@
 import { useCallback, useEffect, useState } from "react";
 import { Character } from "./character";
+import useTypingTimer from "../hooks/useTypingTimer";
+import { Results } from "./results";
 
 interface TypedCharactersProps {
   typedText: string;
   quote: string;
   author: string;
+  isTyping: boolean;
+  handleEndTyping: () => void;
   handleNewQuote: () => void;
   resetTypedText: () => void;
 }
@@ -14,75 +18,106 @@ interface Character {
   key: string;
 }
 
-export function TypedCharacters({typedText, quote, author, handleNewQuote, resetTypedText}: TypedCharactersProps) {
+export function TypedCharacters({
+  typedText,
+  quote,
+  author,
+  isTyping,
+  handleEndTyping,
+  handleNewQuote,
+  resetTypedText,
+}: TypedCharactersProps) {
   // spliting the quote
   const splitedQuote = quote
     .split("")
     .map((char, index) => ({ char, key: `${char}_${index}` }));
-  
+
   //states
-    const initialIsTheWrongCharState = new Array(quote.length).fill(false);
+  const initialIsTheWrongCharState = new Array(quote.length).fill(false);
+  const [isTheWrongChar, setIsTheWrongChar] = useState<boolean[]>(
+    initialIsTheWrongCharState
+  );
+  const [prevTypedTextLength, setPrevTypedTextLength] = useState<number>(0);
+  const [mistakes, setMistakes] = useState<number>(0);
+  const [allErrors, setAllErrors] = useState<number[]>([]);
+  const [cpm, setCpm] = useState<number>(0);
+  const [wpm, setWpm] = useState<number>(0);
+  const [accurency, setAccurency] = useState<number>(0);
 
-    const [isTheWrongChar, setIsTheWrongChar] = useState<boolean[]>(initialIsTheWrongCharState);
-    const[prevTypedTextLength, setPrevTypedTextLength] = useState<number>(0)
-    const [mistakes, setMistakes] = useState<number>(0)
-    const [cpm, setCpm] = useState<number>(0)
-    const [wpm, setWpm] = useState<number>(0)
+  const { startTimer, elapsedTime, stopTimer } = useTypingTimer();
 
+  const timeInMinutes = (elapsedTime / 1000) / 60
 
   // functions
-  const compareTexts = useCallback((typedText: string) => {
+  const compareTexts = useCallback(
+    (typedText: string) => {
       const isWrongCharsLocal = new Array(typedText.length).fill(false);
       let mistakesCount = 0;
-      let cpmCount = typedText.length;
-      // let wpmCount = (((typedText.length / 5) / time) * 60) // create the startTiming and finish it
-  
+      let cpmCount = Math.floor(typedText.length / timeInMinutes)
+      let wpmCount = Math.floor((typedText.length / 5) / timeInMinutes)
+      let accurencyCount: number;
+
+      //loop comparing the typedText to the quote
       splitedQuote.forEach((character, index) => {
         const char = typedText[index];
-        
-        if(index < typedText.length) {
-          if(isWrongCharsLocal[index] = char !== character.char) {
-            isWrongCharsLocal[index] = true; // verify if it's the correct chat 
-            mistakesCount++ // increment the mistakes
+
+        if (index < typedText.length) {
+          if ((isWrongCharsLocal[index] = char !== character.char)) {
+            isWrongCharsLocal[index] = true; // verify if it's the correct chat
+            mistakesCount++; // increment the mistakes
+
+            setAllErrors((prevErrors) => [...prevErrors, index]);
           } else {
             isWrongCharsLocal[index] = false;
           }
-          //cpmCount++  // ele ta resetando o cpm quando eu apago algum caracter
-        } 
+        }
       });
-  
+
       // updating the states
       setIsTheWrongChar(isWrongCharsLocal);
-      setMistakes(mistakesCount)
-      setCpm(cpmCount)
+      setMistakes(mistakesCount);
+      setCpm(cpmCount);
+      setWpm(wpmCount)
+
+      accurencyCount = Math.floor(((quote.length - allErrors.length) / quote.length) * 100)
+      setAccurency(accurencyCount);
       return isWrongCharsLocal.some((isWrong) => isWrong);
-    
-  },[typedText])
+    },
+    [typedText]
+  );
 
   function reset() {
+    stopTimer()
     setIsTheWrongChar(new Array(typedText.length).fill(undefined));
-    // setIsTheWrongChar(initialIsTheWrongCharState);
     setPrevTypedTextLength(0);
     setMistakes(0);
     setCpm(0);
     setWpm(0);
-    resetTypedText()
+    setAccurency(0);
+    resetTypedText();
     handleNewQuote();
     // Adicione futuros estados para redefinir
   }
 
   const allCorrect = quote && typedText === quote;
 
+  // check if isTyping is true and start the timer
+  useEffect(() => {
+    if (isTyping) {
+      startTimer();
+    }
+  }, [isTyping]);
+
+  // check if the typedText is correct
   useEffect(() => {
     if (typedText.length > prevTypedTextLength) {
       compareTexts(typedText);
     }
-  
+
     setPrevTypedTextLength(typedText.length);
-  
     if (allCorrect) {
-      console.log(allCorrect);
       reset();
+      handleEndTyping();
     }
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
@@ -97,25 +132,13 @@ export function TypedCharacters({typedText, quote, author, handleNewQuote, reset
       ))}
       <p className="text-xl font-bold text-right p-16"> - {author}</p>
       {/* results */}
-        {/* remember to create a new component for this  */}
-      <div className="w-4/5 flex justify-around text-lg font-normal text-zinc-400 mx-auto mb-10 text-center">
-        <div>
-          <p>Mistakes:</p>
-          <span className="font-semibold">{mistakes}</span>
-        </div>
-        <div>
-          <p>WPM:</p>
-          <span className="font-semibold">{wpm}</span>
-        </div>
-        <div>
-          <p>CPM:</p>
-          <span className="font-semibold">{cpm}</span>
-        </div>
-        <div>
-          <p>Accurency</p>
-          <span className="font-semibold">98%</span>
-        </div>
-      </div>
+
+     <Results results={{
+        mistakes: mistakes,
+        wpm: wpm,
+        cpm: cpm,
+        accurency: accurency
+      }} />
     </div>
   );
 }
