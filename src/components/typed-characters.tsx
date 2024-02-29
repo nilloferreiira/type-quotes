@@ -9,6 +9,7 @@ interface TypedCharactersProps {
   quote: string;
   author: string;
   isTyping: boolean;
+  activeIndex: number | undefined;
   handleEndTyping: () => void;
   handleNewQuote: () => void;
   resetTypedText: () => void;
@@ -24,6 +25,7 @@ export function TypedCharacters({
   quote,
   author,
   isTyping,
+  activeIndex,
   handleEndTyping,
   handleNewQuote,
   resetTypedText,
@@ -135,8 +137,6 @@ export function TypedCharacters({
     if (allCorrect) {
       saveResults();
       handleEndTyping();
-
-      console.log(results);
     }
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
@@ -157,6 +157,7 @@ export function TypedCharacters({
           key={char.key}
           char={char.char}
           isWrong={isTheWrongChar[index]}
+          activeIndex={index === activeIndex}
         />
       ))}
       <p className="text-xl font-bold text-right p-16"> - {author}</p>

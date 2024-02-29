@@ -6,16 +6,19 @@ export default function QuoteContainer() {
   const { quote, author, handleNewQuote } = useQuotes();
   const [type, setType] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
+  const [activeIndex, setActiveIndex] = useState<number | undefined>(0);
   
   function handleType(event: ChangeEvent<HTMLTextAreaElement>) {
     const typedText = event.target.value;
    
     setType(typedText);
     setIsTyping(true)
+    setActiveIndex(typedText.length)
   }
 
   function resetTypedText() {
     setType("");
+    setActiveIndex(undefined)
   }
 
   function handleEndTyping() {
@@ -36,14 +39,14 @@ export default function QuoteContainer() {
         resetTypedText={resetTypedText}
         isTyping={isTyping}
         handleEndTyping={handleEndTyping}
-
+        activeIndex={activeIndex}
       />
       <textarea
         onChange={handleType}
         value={type}
         name="typingTeste"
         id="textarea"
-        className="z-0 w-full bg-gray-800 text-zinc-300 opacity-100"
+        className="z-0 w-full bg-gray-800 text-zinc-300 opacity-0"
       />
     </main>
   );
