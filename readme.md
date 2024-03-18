@@ -24,3 +24,5 @@ Acesse o aplicativo diretamente em seu navegador através do seguinte link: [Typ
 Para mais informações ou questões, entre em contato através do email: [nilloferreiira@gmail.com](mailto:nilloferreiira@gmail.com)
 
 Divirta-se praticando suas habilidades de digitação com Type Quotes!
+
+![foto mais recente](/public/assets/readmeimg.png)
