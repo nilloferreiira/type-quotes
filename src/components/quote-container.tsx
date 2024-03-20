@@ -30,7 +30,7 @@ export default function QuoteContainer() {
   document.addEventListener("keydown", () => textarea?.focus());
 
   return (
-    <main className="w-4/5 p-32">
+    <main className="w-full md:w-4/5 p-2 md:p-32">
       <TypedCharacters
         typedText={type}
         quote={quote}

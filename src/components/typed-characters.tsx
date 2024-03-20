@@ -141,7 +141,7 @@ export function TypedCharacters({
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
   return (
-    <div className="relative max-w-full mt-3.5 text-3xl leading-relaxed italic">
+    <div className="relative w-full md:w-full max-w-full mt-3.5 text-3xl leading-relaxed italic break-all">
       {isTyping && (
         <p
           className={`not-italic text-base ${
@@ -152,15 +152,17 @@ export function TypedCharacters({
         </p>
       )}
 
+      <div className="w-full md:w-full max-w-full whitespace-break-spaces">
       {splitedQuote.map((char, index) => (
         <Character
-          key={char.key}
-          char={char.char}
-          isWrong={isTheWrongChar[index]}
-          activeIndex={index === activeIndex}
+        key={char.key}
+        char={char.char}
+        isWrong={isTheWrongChar[index]}
+        activeIndex={index === activeIndex}
         />
-      ))}
-      <p className="text-xl font-bold text-right p-16"> - {author}</p>
+        ))}
+        </div>
+      <p className="text-xl font-bold text-center md:text-right p-16"> - {author}</p>
       {/* results */}
 
       {results !== undefined && <Results results={results?.results} />}

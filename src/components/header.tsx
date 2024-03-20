@@ -1,7 +1,7 @@
 export function Header() {
     return (
-        <header className="flex items-start justify-start w-full">
-        <h1 className="text-5xl font-bold">Type Quotes</h1>
+        <header className="flex items-start justify-start w-full p-8">
+        <h1 className="text-4xl md:text-5xl font-bold">Type Quotes</h1>
 
         {/* <nav className="bg-gray-900 w-1/5 p-4 rounded-lg mx-auto">
           <ul className="flex items-center justify-evenly gap-5">
