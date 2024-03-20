@@ -13,6 +13,7 @@ interface TypedCharactersProps {
   handleEndTyping: () => void;
   handleNewQuote: () => void;
   resetTypedText: () => void;
+  focusTextarea: () => void;
 }
 
 interface Character {
@@ -29,6 +30,7 @@ export function TypedCharacters({
   handleEndTyping,
   handleNewQuote,
   resetTypedText,
+  focusTextarea,
 }: TypedCharactersProps) {
   // spliting the quote
   const splitedQuote = quote
@@ -141,7 +143,10 @@ export function TypedCharacters({
   }, [typedText, prevTypedTextLength, compareTexts, allCorrect]);
 
   return (
-    <div className="relative w-full md:w-full max-w-full mt-3.5 text-3xl leading-relaxed italic break-all">
+    <div 
+      onClick={focusTextarea}
+      className="relative w-full md:w-full max-w-full mt-3.5 text-3xl leading-relaxed italic break-all"
+      >
       {isTyping && (
         <p
           className={`not-italic text-base ${

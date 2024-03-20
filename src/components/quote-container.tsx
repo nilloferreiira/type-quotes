@@ -1,4 +1,4 @@
-import { ChangeEvent, useState } from "react";
+import { ChangeEvent, useRef, useState } from "react";
 import { useQuotes } from "../hooks/useQuotes";
 import { TypedCharacters } from "./typed-characters";
 
@@ -7,7 +7,15 @@ export default function QuoteContainer() {
   const [type, setType] = useState<string>("");
   const [isTyping, setIsTyping] = useState<boolean>(false);
   const [activeIndex, setActiveIndex] = useState<number | undefined>(0);
+
+  const textareaRef = useRef<HTMLTextAreaElement>(null)
   
+  function focusTextarea() {
+    if(textareaRef.current) {
+      textareaRef.current.focus();
+    }
+  }
+
   function handleType(event: ChangeEvent<HTMLTextAreaElement>) {
     const typedText = event.target.value;
    
@@ -39,13 +47,14 @@ export default function QuoteContainer() {
         resetTypedText={resetTypedText}
         isTyping={isTyping}
         handleEndTyping={handleEndTyping}
-        activeIndex={activeIndex}
-      />
+        activeIndex={activeIndex} 
+        focusTextarea={focusTextarea}      />
       <textarea
         onChange={handleType}
         value={type}
         name="typingTeste"
         id="textarea"
+        ref={textareaRef}
         className="z-0 w-full bg-gray-800 text-zinc-300 opacity-0"
       />
     </main>
