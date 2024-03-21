@@ -10,7 +10,7 @@ export function Results({
   results: { accurency, cpm, wpm },
 }: ResultsProps) {
   return (
-    <div className="w-4/5 flex justify-around text-lg font-normal text-zinc-400 mx-auto mb-10 text-center">
+    <div className="w-4/5 flex justify-around text-base md:text-lg font-normal text-zinc-400 mx-auto mb-10 text-center">
       <div>
         <p>WPM:</p>
         <span className="font-semibold">{wpm}</span>

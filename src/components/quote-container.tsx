@@ -55,7 +55,7 @@ export default function QuoteContainer() {
         name="typingTeste"
         id="textarea"
         ref={textareaRef}
-        className="z-0 w-10 h-20 opacity-0 absolute top-[40%] left-1/2 transform -translate-x-1/2 -translate-y-full"
+        className="z-0 w-10 h-20 opacity-0 absolute top-[35%] left-1/2 transform -translate-x-1/2 -translate-y-full"
       />
     </main>
   );

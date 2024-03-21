@@ -145,7 +145,7 @@ export function TypedCharacters({
   return (
     <div 
       onClick={focusTextarea}
-      className="relative w-full md:w-full max-w-full mt-3.5 text-3xl leading-relaxed italic break-all"
+      className="relative w-full md:w-full max-w-full mt-3.5 leading-relaxed italic break-all space-y-10 md:space-y-2"
       >
       {isTyping && (
         <p
@@ -157,7 +157,7 @@ export function TypedCharacters({
         </p>
       )}
 
-      <div className="w-full md:w-full max-w-full whitespace-break-spaces">
+      <div className="w-full md:w-full max-w-full whitespace-break-spaces text-xl md:text-3xl">
       {splitedQuote.map((char, index) => (
         <Character
         key={char.key}
@@ -167,7 +167,7 @@ export function TypedCharacters({
         />
         ))}
         </div>
-      <p className="text-xl font-bold text-center md:text-right p-16"> - {author}</p>
+      <p className="text-md md:text-xl font-bold text-center md:text-right p-16"> - {author}</p>
       {/* results */}
 
       {results !== undefined && <Results results={results?.results} />}
